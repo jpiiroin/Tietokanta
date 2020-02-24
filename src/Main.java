@@ -11,18 +11,18 @@ import java.util.Scanner;
 
         while (true) {
 
-            System.out.print("Toiminnot: [1]Luo kanta [2]Lisää paikka"
-                    +"\n[L]Lopeta [P]Poista kanta [N]Näytä kaikki"
-                    + "\nValitse toiminto (1-9): ");
+            System.out.print("Toiminnot: [1]Luo kanta [2]Lisää paikka [3]Lisää asiakas"
+                    + ""
+                    +"\n           [L]Lopeta [P]Poista kanta [N]Näytä kaikki"
+                    + "\n           Valitse toiminto (1-9): ");
 
             String komento = lukija.nextLine();
 
             if (komento.equals("L")) {
-                
+                kanta.poistaKanta();
                 break;
             }
             if (komento.equals("1")) {
-
                 kanta.luoKanta();
             }
             if (komento.equals("2")) {
@@ -36,11 +36,9 @@ import java.util.Scanner;
                 kanta.luoAsiakas(nimi);
             }
             if (komento.equals("P")) {
-                
                 kanta.poistaKanta();
             }
             if (komento.equals("N")) {
-                
                 kanta.naytaKanta();
             }
 

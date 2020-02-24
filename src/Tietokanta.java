@@ -18,26 +18,48 @@ public class Tietokanta {
         System.out.println("Tietokanta luotu");
     }
     public void naytaKanta() throws SQLException {
-        ResultSet r = s.executeQuery("SELECT * FROM Paikat");
-        while (r.next()) {
-            System.out.println(r.getInt("id")+" "+r.getString("nimi"));
-        }  
+        ResultSet paikat = s.executeQuery("SELECT * FROM Paikat");
+        System.out.println("Paikat:");
+        while (paikat.next()) {
+            System.out.println(paikat.getInt("id")+" "+paikat.getString("nimi"));
+        }
+        System.out.println("Asiakkaat:");
+        ResultSet asiakkaat = s.executeQuery("SELECT * FROM Asiakkaat");
+        while (asiakkaat.next()) {
+            System.out.println(asiakkaat.getInt("id")+" "+asiakkaat.getString("nimi"));
+        }
     }
     public void poistaKanta() throws SQLException {
         s.close();
         db.close();
-        boolean result = new File("D:\\NetBeansProjects\\Tietokanta\\testi.db").delete();
+        boolean result = new File("testi.db").delete();
     }
     public void luoPaikka(String nimi) throws SQLException {
-        PreparedStatement p = db.prepareStatement("INSERT INTO Paikat(nimi) VALUES (?)");
-        p.setString(1,nimi);
-        p.executeUpdate();
-        System.out.println("Paikka lisätty");
+        
+        PreparedStatement kysy = db.prepareStatement("SELECT nimi FROM Paikat WHERE nimi=?");
+        kysy.setString(1,nimi);
+        ResultSet r = kysy.executeQuery();
+        if (r.next()) {
+            System.out.println("Paikka on jo olemassa");
+        } else {
+            PreparedStatement talleta = db.prepareStatement("INSERT INTO Paikat(nimi) VALUES (?)");
+            talleta.setString(1,nimi);
+            talleta.executeUpdate();
+            System.out.println("Paikka lisätty");
+        }
     }
     public void luoAsiakas(String nimi) throws SQLException {
-        PreparedStatement p = db.prepareStatement("INSERT INTO Asiakkaat(nimi) VALUES (?)");
-        p.setString(1,nimi);
-        p.executeUpdate();
-        System.out.println("Asiakas lisätty");
+        
+        PreparedStatement kysy = db.prepareStatement("SELECT nimi FROM Asiakkaat WHERE nimi=?");
+        kysy.setString(1,nimi);
+        ResultSet r = kysy.executeQuery();
+        if (r.next()) {
+            System.out.println("Asiakas on jo olemassa");
+        } else {
+            PreparedStatement p = db.prepareStatement("INSERT INTO Asiakkaat(nimi) VALUES (?)");
+            p.setString(1,nimi);
+            p.executeUpdate();
+            System.out.println("Asiakas lisätty");
+        }
     }
 } 
