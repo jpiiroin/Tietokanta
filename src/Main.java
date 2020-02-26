@@ -11,7 +11,7 @@ import java.util.Scanner;
 
         while (true) {
 
-            System.out.print("Toiminnot: [1]Luo kanta [2]Lisää paikka [3]Lisää asiakas"
+            System.out.print("Toiminnot: [1]Luo kanta [2]Lisää paikka [3]Lisää asiakas [4]Lisää paketti"
                     + ""
                     +"\n           [L]Lopeta [P]Poista kanta [N]Näytä kaikki"
                     + "\n           Valitse toiminto (1-9): ");
@@ -19,7 +19,6 @@ import java.util.Scanner;
             String komento = lukija.nextLine();
 
             if (komento.equals("L")) {
-                kanta.poistaKanta();
                 break;
             }
             if (komento.equals("1")) {
@@ -34,6 +33,13 @@ import java.util.Scanner;
                 System.out.print("Anna asiakkaan nimi: ");
                 String nimi = lukija.nextLine();
                 kanta.luoAsiakas(nimi);
+            }
+            if (komento.equals("4")) {
+                System.out.print("Anna paketin seurantakoodi: ");
+                String koodi = lukija.nextLine();
+                System.out.print("Anna asiakkaan nimi: ");
+                String nimi = lukija.nextLine();
+                kanta.luoPaketti(koodi, nimi);
             }
             if (komento.equals("P")) {
                 kanta.poistaKanta();
