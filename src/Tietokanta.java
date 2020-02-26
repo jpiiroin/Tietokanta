@@ -1,5 +1,7 @@
 import java.sql.*;
 import java.io.*;
+import java.time.LocalDateTime; 
+import java.time.format.DateTimeFormatter;
 
 public class Tietokanta {
     
@@ -39,6 +41,15 @@ public class Tietokanta {
             System.out.println(tapahtumat.getInt("id")+" "+tapahtumat.getString("paketti_id")+" "+tapahtumat.getString("paikka_id")
             +" "+tapahtumat.getString("kuvaus"));
         }
+        naytaAika();
+        
+    }
+    public void naytaAika() {
+        LocalDateTime myDateObj = LocalDateTime.now();
+        DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("dd.M.yyyy HH:mm");
+
+        String formattedDate = myDateObj.format(myFormatObj);
+        System.out.println(formattedDate);
     }
     public void poistaKanta() throws SQLException {
         s.close();
@@ -93,6 +104,7 @@ public class Tietokanta {
         kysypaikka.setString(1,paikka);
         ResultSet toka = kysypaikka.executeQuery();
         int paikka_id = toka.getInt("id");
+        
         PreparedStatement talleta = db.prepareStatement("INSERT INTO Tapahtumat(paketti_id,paikka_id, kuvaus) VALUES (?,?,?)");
         talleta.setInt(1, paketti_id);
         talleta.setInt(2, paikka_id);

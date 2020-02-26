@@ -44,9 +44,9 @@ import java.util.Scanner;
             if (komento.equals("5")) {
                 System.out.print("Anna paketin seurantakoodi: ");
                 String koodi = lukija.nextLine();
-                System.out.println("Anna tapahtuman paikka: ");
+                System.out.print("Anna tapahtuman paikka: ");
                 String paikka = lukija.nextLine();
-                System.out.println("Anna tapahtuman kuvaus: ");
+                System.out.print("Anna tapahtuman kuvaus: ");
                 String kuvaus = lukija.nextLine();
                 kanta.luoTapahtuma(koodi, paikka, kuvaus);
             }
