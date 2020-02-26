@@ -12,7 +12,7 @@ import java.util.Scanner;
         while (true) {
 
             System.out.print("Toiminnot: [1]Luo kanta [2]Lisää paikka [3]Lisää asiakas [4]Lisää paketti"
-                    + ""
+                    + " [5]Lisää tapahtuma"
                     +"\n           [L]Lopeta [P]Poista kanta [N]Näytä kaikki"
                     + "\n           Valitse toiminto (1-9): ");
 
@@ -40,6 +40,15 @@ import java.util.Scanner;
                 System.out.print("Anna asiakkaan nimi: ");
                 String nimi = lukija.nextLine();
                 kanta.luoPaketti(koodi, nimi);
+            }
+            if (komento.equals("5")) {
+                System.out.print("Anna paketin seurantakoodi: ");
+                String koodi = lukija.nextLine();
+                System.out.println("Anna tapahtuman paikka: ");
+                String paikka = lukija.nextLine();
+                System.out.println("Anna tapahtuman kuvaus: ");
+                String kuvaus = lukija.nextLine();
+                kanta.luoTapahtuma(koodi, paikka, kuvaus);
             }
             if (komento.equals("P")) {
                 kanta.poistaKanta();

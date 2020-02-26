@@ -33,6 +33,12 @@ public class Tietokanta {
         while (paketit.next()) {
             System.out.println(paketit.getInt("id")+" "+paketit.getString("seurantakoodi")+" "+paketit.getString("asiakas_id"));
         }
+        System.out.println("Tapahtumat:");
+        ResultSet tapahtumat = s.executeQuery("SELECT * FROM Tapahtumat");
+        while (tapahtumat.next()) {
+            System.out.println(tapahtumat.getInt("id")+" "+tapahtumat.getString("paketti_id")+" "+tapahtumat.getString("paikka_id")
+            +" "+tapahtumat.getString("kuvaus"));
+        }
     }
     public void poistaKanta() throws SQLException {
         s.close();
@@ -72,19 +78,26 @@ public class Tietokanta {
         kysy.setString(1,nimi);
         ResultSet r = kysy.executeQuery();
         int asiakas_id = r.getInt("id");
-        
         PreparedStatement talleta = db.prepareStatement("INSERT INTO Paketit(seurantakoodi,asiakas_id) VALUES (?,?)");
         talleta.setString(1,koodi);
         talleta.setInt(2,asiakas_id);
-
+        talleta.executeUpdate();
+        System.out.println("Paketti lisätty");
+    }
+    public void luoTapahtuma(String seurantakoodi, String paikka, String kuvaus) throws SQLException {
+        PreparedStatement kysykoodi = db.prepareStatement("SELECT id FROM Paketit WHERE seurantakoodi=?");
+        kysykoodi.setString(1,seurantakoodi);
+        ResultSet eka = kysykoodi.executeQuery();
+        int paketti_id = eka.getInt("id");
+        PreparedStatement kysypaikka = db.prepareStatement("SELECT id FROM Paikat WHERE nimi=?");
+        kysypaikka.setString(1,paikka);
+        ResultSet toka = kysypaikka.executeQuery();
+        int paikka_id = toka.getInt("id");
+        PreparedStatement talleta = db.prepareStatement("INSERT INTO Tapahtumat(paketti_id,paikka_id, kuvaus) VALUES (?,?,?)");
+        talleta.setInt(1, paketti_id);
+        talleta.setInt(2, paikka_id);
+        talleta.setString(3, kuvaus);
         talleta.executeUpdate();
         
-        
-        
-        
-        
-        
-        
-        System.out.println("Paketti lisätty");
     }
 } 
