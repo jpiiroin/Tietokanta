@@ -13,10 +13,10 @@ public class Tietokanta {
     }
     public void luoKanta() throws SQLException {
         
-        s.execute("CREATE TABLE Paikat (id INTEGER PRIMARY KEY, nimi TEXT)");
+        s.execute("CREATE TABLE Paikat (id INTEGER PRIMARY KEY, nimi STRING)");
         s.execute("CREATE TABLE Paketit (id INTEGER PRIMARY KEY, seurantakoodi STRING, asiakas_id INTEGER)");
-        s.execute("CREATE TABLE Asiakkaat (id INTEGER PRIMARY KEY, nimi TEXT)");
-        s.execute("CREATE TABLE Tapahtumat (id INTEGER PRIMARY KEY, paketti_id INTEGER, paikka_id INTEGER, kuvaus TEXT, lisaysaika DATETIME )");
+        s.execute("CREATE TABLE Asiakkaat (id INTEGER PRIMARY KEY, nimi STRING)");
+        s.execute("CREATE TABLE Tapahtumat (id INTEGER PRIMARY KEY, paketti_id INTEGER, paikka_id INTEGER, kuvaus STRING, lisaysaika STRING )");
         System.out.println("Tietokanta luotu");
     }
     public void naytaKanta() throws SQLException {
@@ -39,22 +39,21 @@ public class Tietokanta {
         ResultSet tapahtumat = s.executeQuery("SELECT * FROM Tapahtumat");
         while (tapahtumat.next()) {
             System.out.println(tapahtumat.getInt("id")+" "+tapahtumat.getString("paketti_id")+" "+tapahtumat.getString("paikka_id")
-            +" "+tapahtumat.getString("kuvaus"));
+            +" "+tapahtumat.getString("kuvaus")+" "+tapahtumat.getString("lisaysaika"));
         }
-        naytaAika();
         
     }
-    public void naytaAika() {
+    public String naytaAika() {
         LocalDateTime myDateObj = LocalDateTime.now();
         DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("dd.M.yyyy HH:mm");
-
         String formattedDate = myDateObj.format(myFormatObj);
-        System.out.println(formattedDate);
+        return formattedDate;
     }
     public void poistaKanta() throws SQLException {
         s.close();
         db.close();
         new File("testi.db").delete();
+        System.out.println("Tietokanta poistettu");
     }
     public void luoPaikka(String nimi) throws SQLException {
         
@@ -62,7 +61,7 @@ public class Tietokanta {
         kysy.setString(1,nimi);
         ResultSet r = kysy.executeQuery();
         if (r.next()) {
-            System.out.println("Paikka on jo olemassa");
+            System.out.println("VIRHE: Paikka on jo olemassa");
         } else {
             PreparedStatement talleta = db.prepareStatement("INSERT INTO Paikat(nimi) VALUES (?)");
             talleta.setString(1,nimi);
@@ -76,7 +75,7 @@ public class Tietokanta {
         kysy.setString(1,nimi);
         ResultSet r = kysy.executeQuery();
         if (r.next()) {
-            System.out.println("Asiakas on jo olemassa");
+            System.out.println("VIRHE: Asiakas on jo olemassa");
         } else {
             PreparedStatement talleta = db.prepareStatement("INSERT INTO Asiakkaat(nimi) VALUES (?)");
             talleta.setString(1,nimi);
@@ -85,6 +84,7 @@ public class Tietokanta {
         }
     }
     public void luoPaketti(String koodi, String nimi) throws SQLException {
+        
         PreparedStatement kysy = db.prepareStatement("SELECT id FROM Asiakkaat WHERE nimi=?");
         kysy.setString(1,nimi);
         ResultSet r = kysy.executeQuery();
@@ -96,6 +96,7 @@ public class Tietokanta {
         System.out.println("Paketti lisätty");
     }
     public void luoTapahtuma(String seurantakoodi, String paikka, String kuvaus) throws SQLException {
+        
         PreparedStatement kysykoodi = db.prepareStatement("SELECT id FROM Paketit WHERE seurantakoodi=?");
         kysykoodi.setString(1,seurantakoodi);
         ResultSet eka = kysykoodi.executeQuery();
@@ -105,10 +106,11 @@ public class Tietokanta {
         ResultSet toka = kysypaikka.executeQuery();
         int paikka_id = toka.getInt("id");
         
-        PreparedStatement talleta = db.prepareStatement("INSERT INTO Tapahtumat(paketti_id,paikka_id, kuvaus) VALUES (?,?,?)");
+        PreparedStatement talleta = db.prepareStatement("INSERT INTO Tapahtumat(paketti_id,paikka_id, kuvaus, lisaysaika) VALUES (?,?,?,?)");
         talleta.setInt(1, paketti_id);
         talleta.setInt(2, paikka_id);
         talleta.setString(3, kuvaus);
+        talleta.setString(4, naytaAika());
         talleta.executeUpdate();
         
     }

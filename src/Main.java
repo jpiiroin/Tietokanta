@@ -13,7 +13,7 @@ import java.util.Scanner;
 
             System.out.print("Toiminnot: [1]Luo kanta [2]Lisää paikka [3]Lisää asiakas [4]Lisää paketti"
                     + " [5]Lisää tapahtuma"
-                    +"\n           [L]Lopeta [P]Poista kanta [N]Näytä kaikki"
+                    +"\n           [L]Lopeta [P]Poista kanta ja lopeta [N]Näytä kaikki"
                     + "\n           Valitse toiminto (1-9): ");
 
             String komento = lukija.nextLine();
@@ -52,6 +52,7 @@ import java.util.Scanner;
             }
             if (komento.equals("P")) {
                 kanta.poistaKanta();
+                break;
             }
             if (komento.equals("N")) {
                 kanta.naytaKanta();
