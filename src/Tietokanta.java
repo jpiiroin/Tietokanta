@@ -71,18 +71,22 @@ public class Tietokanta {
     }
     public void luoAsiakas(String nimi) throws SQLException {
         
-        PreparedStatement kysy = db.prepareStatement("SELECT nimi FROM Asiakkaat WHERE nimi=?");
-        kysy.setString(1,nimi);
-        ResultSet r = kysy.executeQuery();
-        if (r.next()) {
+        if (kysyAsiakas(nimi)) {
             System.out.println("VIRHE: Asiakas on jo olemassa");
         } else {
             PreparedStatement talleta = db.prepareStatement("INSERT INTO Asiakkaat(nimi) VALUES (?)");
             talleta.setString(1,nimi);
             talleta.executeUpdate();
             System.out.println("Asiakas lisätty");
-        }
+        }   
     }
+    public boolean kysyAsiakas (String nimi) throws SQLException {
+        PreparedStatement kysy = db.prepareStatement("SELECT nimi FROM Asiakkaat WHERE nimi=?");
+        kysy.setString(1,nimi);
+        ResultSet r = kysy.executeQuery();
+        return r.next();
+    }
+    
     public void luoPaketti(String koodi, String nimi) throws SQLException {
         
         PreparedStatement kysy = db.prepareStatement("SELECT id FROM Asiakkaat WHERE nimi=?");
