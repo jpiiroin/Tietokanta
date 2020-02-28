@@ -57,31 +57,29 @@ public class Tietokanta {
     }
     public void luoPaikka(String nimi) throws SQLException {
         
-        PreparedStatement kysy = db.prepareStatement("SELECT nimi FROM Paikat WHERE nimi=?");
-        kysy.setString(1,nimi);
-        ResultSet r = kysy.executeQuery();
-        if (r.next()) {
+        if (onkoOlemassa(nimi, "Paikat")) {
             System.out.println("VIRHE: Paikka on jo olemassa");
         } else {
-            PreparedStatement talleta = db.prepareStatement("INSERT INTO Paikat(nimi) VALUES (?)");
-            talleta.setString(1,nimi);
-            talleta.executeUpdate();
+            talletaKantaan(nimi, "Paikat");
             System.out.println("Paikka lisätty");
-        }
+        }   
     }
     public void luoAsiakas(String nimi) throws SQLException {
         
-        if (kysyAsiakas(nimi)) {
+        if (onkoOlemassa(nimi, "Asiakkaat")) {
             System.out.println("VIRHE: Asiakas on jo olemassa");
         } else {
-            PreparedStatement talleta = db.prepareStatement("INSERT INTO Asiakkaat(nimi) VALUES (?)");
-            talleta.setString(1,nimi);
-            talleta.executeUpdate();
+            talletaKantaan(nimi, "Asiakkaat");
             System.out.println("Asiakas lisätty");
         }   
     }
-    public boolean kysyAsiakas (String nimi) throws SQLException {
-        PreparedStatement kysy = db.prepareStatement("SELECT nimi FROM Asiakkaat WHERE nimi=?");
+    public void talletaKantaan(String nimi, String kanta) throws SQLException {
+        PreparedStatement talleta = db.prepareStatement("INSERT INTO "+kanta+"(nimi) VALUES (?)");
+        talleta.setString(1,nimi);
+        talleta.executeUpdate();
+    }
+    public boolean onkoOlemassa (String nimi, String kanta) throws SQLException {
+        PreparedStatement kysy = db.prepareStatement("SELECT nimi FROM "+kanta+" WHERE nimi=?");
         kysy.setString(1,nimi);
         ResultSet r = kysy.executeQuery();
         return r.next();
