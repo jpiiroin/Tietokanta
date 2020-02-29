@@ -12,7 +12,7 @@ import java.util.Scanner;
         while (true) {
 
             System.out.print("Toiminnot: [1]Luo kanta [2]Lisää paikka [3]Lisää asiakas [4]Lisää paketti"
-                    + " [5]Lisää tapahtuma"
+                    + " [5]Lisää tapahtuma [6]Näytä paketti"
                     +"\n           [L]Lopeta [P]Poista kanta ja lopeta [N]Näytä kaikki"
                     + "\n           Valitse toiminto (1-9): ");
 
@@ -50,6 +50,11 @@ import java.util.Scanner;
                 String kuvaus = lukija.nextLine();
                 kanta.luoTapahtuma(koodi, paikka, kuvaus);
             }
+            if (komento.equals("6")) {
+                System.out.print("Anna paketin seurantakoodi: ");
+                String koodi = lukija.nextLine();
+                kanta.haePaketti(koodi);
+            }
             if (komento.equals("P")) {
                 kanta.poistaKanta();
                 break;
@@ -57,9 +62,6 @@ import java.util.Scanner;
             if (komento.equals("N")) {
                 kanta.naytaKanta();
             }
-
         }
-
     }
-
 }
